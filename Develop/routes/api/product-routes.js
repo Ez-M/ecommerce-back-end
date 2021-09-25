@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 // get one product
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
-  return Product.findAll({ where: { id: req.params.id } });
+  return Product.findAll({ where: { id: req.params.id }, include: [{ model: Category}, { model: Tag}] });
   // be sure to include its associated Category and Tag data
 });
 
