@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
   // find all products
   try {
     dbProdData = await Product.findAll({
-      include: [{ model: Tag, through: ProductTag, as: "pro_tag"}]
+      include: [{ model: Category}, { model: Tag, through: ProductTag, as: "pro_tag"}]
     });
     res.json(dbProdData);
   } catch (err) {
@@ -22,9 +22,14 @@ router.get('/', async (req, res) => {
 // get one product
 router.get('/:id', async (req, res) => {
   // find a single product by its `id`
-  dbProdData = await Product.findAll({ where: { id: req.params.id }, include: [{ model: Category}, { model: Tag}] });
+  try {
+  dbProdData = await Product.findAll({ where: { id: req.params.id }, include: [{ model: Category}, { model: Tag, through: ProductTag, as: "pro_tag"}] });
   // be sure to include its associated Category and Tag data
   res.json(dbProdData);
+  } catch(err){
+    console.log(err);
+    res.status(500).json(err);
+  }
 });
 
 // create new product
